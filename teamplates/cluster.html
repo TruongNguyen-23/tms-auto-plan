@@ -1,0 +1,127 @@
+
+        <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Map Cluster</title>
+                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXiMLkRaq16MeTMVOFnYWqxDd0TCV3prU&callback=initMap" async defer></script>
+                <script>
+                    function initMap() {
+                        
+                        var circles = [];
+                        var tripNo=['Trip #1+2+3'];
+                        var labelTrip=[];
+                        var infoWindows = [];
+                        var makerWindows= [];
+                        var tripPoint=[];
+                        var radius=[12028.97267781112];
+                        var points=[[[10.7992891, 106.6377284], [10.832914, 106.6638], [10.8289987, 106.6731312], [10.7870376, 106.5929644], [10.8239419378167, 106.63472781062], [10.7987651, 106.6890621], [10.7993228, 106.6880031], [10.788921, 106.703516], [10.800081, 106.699315], [10.9263192, 106.6539322]]];
+                        const pathIcon="https://www.google.com/mapfiles/marker_green.png";
+                        var bounds = new google.maps.LatLngBounds();
+                        var map = new google.maps.Map(document.getElementById('map'), {
+                            center: {lat: 10.81855904378167, lng: 106.663618021062},
+                            zoom: 5
+                        });
+                        for (var i = 0; i < 1; i++) {
+                            var center = new google.maps.LatLng([[10.81855904378167, 106.663618021062]][i][0], [[10.81855904378167, 106.663618021062]][i][1]);
+
+                            var circle = new google.maps.Circle({
+                            center: center,
+                            radius: radius[i],
+                            strokeColor: '#FF0000',
+                            strokeOpacity: 0.8,
+                            strokeWeight: 2,
+                            fillColor: '#d59696',
+                            fillOpacity: 0.35,
+                            map: map
+                            });
+                            circles.push(circle);
+                            var contentString = tripNo[i];
+                            var infoWindow = new google.maps.InfoWindow({
+                                content: contentString
+                            });
+                            infoWindows.push(infoWindow);
+                            hoverData(circle, infoWindows, map);
+                            bounds.extend(center);
+                        }
+                        points.forEach(function (point) {
+                            showPoint(point)  
+                        });
+                        loadMakerData()
+                        function showPoint(point){
+                            point.forEach(function (location,index) {
+                                var marker = new google.maps.Marker({
+                                    position: new google.maps.LatLng(location[0], location[1]),
+                                    map: map,
+                                });
+                                if (point.length == 1){
+                                    marker.setIcon(pathIcon);
+                                    tripPoint.push({position:{lat:location[0],lng:location[1]}})}
+                                bounds.extend(new google.maps.LatLng(location[0], location[1]));
+                            });
+                        }
+                        function loadMakerData(){
+                            radius.forEach(function (item, index) {
+                                if (item == 0) {
+                                    var stringMaker = tripNo[index];
+                                    labelTrip.push(stringMaker)
+                                }
+                                
+                            })
+                            if (labelTrip.length >= 1){
+                                tripPoint.forEach(function (item, index) {
+                                    Object.assign(item, { content: labelTrip[index] })
+                                    addMarkerWithInfoWindow(item.position, item.content);
+                                })
+                            }
+                        }
+                        function addMarkerWithInfoWindow(position, content) {
+                            var marker = new google.maps.Marker({
+                                position: position,
+                                map: map
+                            });
+                            marker.setIcon(pathIcon);
+                            var infoWindow = new google.maps.InfoWindow({
+                                content: content
+                            });
+
+                            marker.addListener('mouseover', function () {
+                                infoWindow.open(map, marker);
+                            });
+
+                            marker.addListener('mouseout', function () {
+                                infoWindow.close();
+                            });
+                        }
+                        function hoverData(obj,arr,map) {
+                            function closeTitle(){
+                                for (var i = 0; i < arr.length; i++) {
+                                    arr[i].close();
+                                }
+                            }
+                            google.maps.event.addListener(obj, 'mouseover', (function (index) {
+                                return function (event) {
+                                    closeTitle()
+                                    arr[index].setPosition(event.latLng);
+                                    arr[index].open(map, obj);
+                                };
+                            })(i));
+                            google.maps.event.addListener(obj, 'mouseout', function () {
+                                closeTitle()
+                            });
+                        }
+                        map.fitBounds(bounds);
+                    }
+                </script>
+            </head>
+                <body>
+                    <div id="map" style="
+                    height:100%;
+                    width:100%;
+                    position:absolute;
+                    top:0;
+                    left:0;
+                    overflow:hidden;">
+                    </div>
+                </body>
+            </html>
+            

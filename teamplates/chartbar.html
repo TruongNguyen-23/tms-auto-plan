@@ -1,0 +1,75 @@
+
+        <html>
+        <head>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+            <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $('body').scrollTop(1000);
+                });
+                window.onload = function () {
+                    var ctx = document.getElementById("canvas");
+                    Chart.pluginService.register({
+                        afterDraw: function (chart) {
+                            if (typeof chart.config.options.lineAt != 'undefined') {
+                                var lineAt = chart.config.options.lineAt;
+                                var ctxPlugin = chart.chart.ctx;
+                                var xAxe = chart.scales[chart.config.options.scales.xAxes[0].id];
+                                var yAxe = chart.scales[chart.config.options.scales.yAxes[0].id];
+                                if (yAxe.min != 0) return;
+                                ctxPlugin.strokeStyle = "#c40e32";
+                                ctxPlugin.beginPath();
+                                lineAt = (lineAt - yAxe.min) * (100 / yAxe.max);
+                                lineAt = (100 - lineAt) / 100 * (yAxe.height) + yAxe.top;
+                                ctxPlugin.moveTo(xAxe.left, lineAt);
+                                ctxPlugin.lineTo(xAxe.right, lineAt);
+                                ctxPlugin.stroke();
+                            }
+                        }
+                    });
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Trip 1', 'Trip 2', 'Trip 3', 'Trip 4', '', '', '', '', '', ''],
+                            datasets: [{
+                                data:[900.0, 400.0, 200.0, 600.0],
+                                backgroundColor:['#b7b5e0', '#c3a2cc', '#b7b5e0', '#b7b5e0'],
+                                borderWidth: 2
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            legend: {
+                                display: false
+                            },
+                            
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        min: 0,
+                                        autoSkip: false,
+                                        beginAtZero: true,
+                                        stepSize: 110,
+                                        max:1100
+                                    }
+                                }]
+                            }
+                        },
+                    });
+                }
+
+            </script>
+        </head>
+            <body>
+                <canvas id="canvas"></canvas>
+                    <style>
+                    #canvas {
+                        max-width: 2000px;
+                        position: relative;
+                        width: 1875px;
+                    }
+                    </style>
+            </body>
+        </html>
+        

@@ -1,0 +1,50 @@
+
+        <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Map Cluster</title>
+                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXiMLkRaq16MeTMVOFnYWqxDd0TCV3prU&callback=initMap" async defer></script>
+                <script>
+                    function initMap() {
+                        var map = new google.maps.Map(document.getElementById('map'), {
+                            center: {lat: 10.74330603688172, lng: 106.7057369007527},
+                            zoom: 12
+                        });
+                        
+                        for (var i = 0; i < 2; i++) {
+                            var center = new google.maps.LatLng([[10.74330603688172, 106.7057369007527], [10.73882031952381, 106.72960282285715]][i][0], [[10.74330603688172, 106.7057369007527], [10.73882031952381, 106.72960282285715]][i][1]);
+
+                            var marker = new google.maps.Marker({
+                            position: center,
+                            map: map,
+                            title: 'Data Point'
+                            });
+
+                            var circle = new google.maps.Circle({
+                            center: center,
+                            radius: [1206.1559639454408, 486.5930490375009][i],
+                            strokeColor: '#FF0000',
+                            strokeOpacity: 0.8,
+                            strokeWeight: 2,
+                            fillColor: '#d59696',
+                            fillOpacity: 0.35,
+                            map: map
+                            });
+                        }
+                        
+                        [[10.73252319, 106.70693794], [10.7410835, 106.70203763], [10.74838756, 106.70536196], [10.7495301, 106.7084913], [10.7400531, 106.73387648], [10.73769961, 106.72571768]].forEach(function (point) {
+                            var marker = new google.maps.Marker({
+                                position: new google.maps.LatLng(point[0], point[1]),
+                                map: map,
+                                title: 'Data Point'
+                            });
+                        });
+                    }
+                </script>
+            </head>
+                <body>
+                    <div id="map" style="height: 830px; width: 100%;">
+                    </div>
+                </body>
+            </html>
+            

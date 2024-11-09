@@ -1,0 +1,89 @@
+
+        <html>
+        <head>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+            <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+            <script type="text/javascript">
+                window.onload = function () {
+                    var ctx = document.getElementById("canvas");
+                    function raiseEvent(event,trip) {
+                        result = {
+                            "TripNo": trip,
+                            "EventName": event
+                        }
+                        window.chrome.webview.postMessage(JSON.stringify(result));
+                    }
+                    Chart.pluginService.register({
+                        afterDraw: function (chart) {
+                            if (typeof chart.config.options.lineAt != 'undefined') {
+                                var lineAt = chart.config.options.lineAt;
+                                var ctxPlugin = chart.chart.ctx;
+                                var xAxe = chart.scales[chart.config.options.scales.xAxes[0].id];
+                                var yAxe = chart.scales[chart.config.options.scales.yAxes[0].id];
+                                if (yAxe.min != 0) return;
+                                ctxPlugin.strokeStyle = "#c40e32";
+                                ctxPlugin.beginPath();
+                                lineAt = (lineAt - yAxe.min) * (100 / yAxe.max);
+                                lineAt = (100 - lineAt) / 100 * (yAxe.height) + yAxe.top;
+                                ctxPlugin.moveTo(xAxe.left, lineAt);
+                                ctxPlugin.lineTo(xAxe.right, lineAt);
+                                ctxPlugin.stroke();
+                            }
+                        }
+                    });
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Trip #1+2+3', '', '', '', '', '', '', '', '', ''],
+                            datasets: [{
+                                data:[4724.782],
+                                backgroundColor:['#e48cba'],
+                                borderWidth: 2
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            legend: {
+                                display: false
+                            },
+                            
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        min: 0,
+                                        autoSkip: false,
+                                        beginAtZero: true,
+                                        stepSize: 492,
+                                        max:4924
+                                    }
+                                }]
+                            },
+                            onClick: function (e) {
+                                var tripLabels = this.getElementsAtEvent(e)[0]._model.label;
+                                raiseEvent("TRIP_CLICK", tripLabels)
+                            }
+                        },
+                    });
+                }
+
+            </script>
+            <style>
+                .chart-container {
+                    width: 100%;
+                    height: 95vh;
+                }
+                canvas {
+                    width: 100% !important;
+                    height: 100% !important;
+                }
+            </style>
+        </head>
+            <body>
+                <div class="chart-container">
+                    <canvas id="canvas"></canvas>
+                </div>
+            </body>
+        </html>
+        

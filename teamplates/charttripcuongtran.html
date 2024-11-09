@@ -1,0 +1,129 @@
+
+        <html>
+        <head>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+            <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+            <script type="text/javascript">
+                window.onload = function () {
+                    var ctx = document.getElementById("canvas");
+                    function raiseEvent(event,trip) {
+                        result = {
+                            "TripNo": trip,
+                            "EventName": event
+                        }
+                        window.chrome.webview.postMessage(JSON.stringify(result));
+                    }
+                    Chart.pluginService.register({
+                        afterDraw: function (chart) {
+                            if (typeof chart.config.options.lineAt != 'undefined') {
+                                var lineAt = chart.config.options.lineAt;
+                                var ctxPlugin = chart.chart.ctx;
+                                var xAxe = chart.scales[chart.config.options.scales.xAxes[0].id];
+                                var yAxe = chart.scales[chart.config.options.scales.yAxes[0].id];
+                                if (yAxe.min != 0) return;
+                                ctxPlugin.strokeStyle = "#c40e32";
+                                ctxPlugin.beginPath();
+                                lineAt = (lineAt - yAxe.min) * (100 / yAxe.max);
+                                lineAt = (100 - lineAt) / 100 * (yAxe.height) + yAxe.top;
+                                ctxPlugin.moveTo(xAxe.left, lineAt);
+                                ctxPlugin.lineTo(xAxe.right, lineAt);
+                                ctxPlugin.stroke();
+                            }
+                            var ctx = chart.chart.ctx;
+                            chart.data.datasets.forEach(function (dataset, i) {
+                                var meta = chart.getDatasetMeta(i);
+                                if (!meta.hidden) {
+                                    meta.data.forEach(function (element, index) {
+                                        var position = element.tooltipPosition();
+                                        var value = dataset.data[index];
+                                        var yAxe = chart.scales[chart.config.options.scales.yAxes[0].id];
+                                        var middleY = (element._model.y + yAxe.bottom) / 2;
+                                        ctx.fillStyle = 'white'; 
+                                        ctx.font = 'bold 12px Arial';
+                                        ctx.textAlign = 'center';
+                                        ctx.fillText(value, position.x, middleY);
+                                    });
+                                }
+                            });
+                        }
+                    });
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Trip #1', 'Trip #2', 'Trip #3', '', '', '', '', '', '', ''],
+                            datasets: [{
+                                data:[14.0, 4.94, 14.0],
+                                backgroundColor:['#3b5998', '#dc4e41', '#bd081c'],
+                                borderWidth: 2
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            legend: {
+                                display: false
+                            },
+                            lineAt:15.0,
+                            scales: {
+                                
+                                yAxes: [{
+                                    ticks: {
+                                        min: 0,
+                                        autoSkip: false,
+                                        beginAtZero: true,
+                                        stepSize:3,
+                                        max:15
+                                    }
+                                }]
+                            },
+                            onClick: function (e) {
+                                var tripLabels = this.getElementsAtEvent(e)[0]._model.label;
+                                var numberTrip = tripLabels.replace("Trip", "").trim();
+                                numberTrip=numberTrip.replace("#","")
+                                raiseEvent("TRIP_CLICK", numberTrip)
+                            },
+                            onResize: function (chart, size) {
+                                if (chart.height > 300) {
+                                    chart.options.lineAt = 15.0;
+                                    chart.options.scales.yAxes[0].ticks.max = 20;
+                                    chart.options.scales.yAxes[0].ticks.stepSize = 4;
+                                    chart.update();
+                                }
+                                else {
+                                    chart.options.lineAt = 15.0;
+                                    chart.options.scales.yAxes[0].ticks.max = 15;
+                                    chart.options.scales.yAxes[0].ticks.stepSize = 3;
+                                    chart.update();
+                                }
+                            }
+                        },
+                    });
+                    function onDoubleClick(e) {
+                        var tripLabels = myChart.getElementsAtEvent(e)[0]._model.label;
+                        var numberTrip = tripLabels.replace("Trip", "").trim();
+                        numberTrip = numberTrip.replace("#", "")
+                        raiseEvent("TRIP_DOUBLE_CLICK", numberTrip)
+                    }
+                    ctx.oncontextmenu = onDoubleClick;
+                }
+
+            </script>
+            <style>
+                .chart-container {
+                    width: 100%;
+                    height: 95vh;
+                }
+                canvas {
+                    width: 100% !important;
+                    height: 100% !important;
+                }
+            </style>
+        </head>
+            <body>
+                <div class="chart-container">
+                    <canvas id="canvas"></canvas>
+                </div>
+            </body>
+        </html>
+        

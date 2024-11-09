@@ -1,0 +1,56 @@
+
+        <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Route TSP</title>
+                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXiMLkRaq16MeTMVOFnYWqxDd0TCV3prU&libraries=geometry&callback=initMap" async defer"></script>
+                <script>
+                   const start_Point=10.934274528828208
+                    const end_Point=106.87081524915541
+                    function initMap() {
+                        const service = new google.maps.DirectionsService;
+                        const station=[{'lat': 10.934274528828208, 'lng': 106.87081524915541}, {'lat': 10.9243858, 'lng': 106.7135795}, {'lat': 10.8833964, 'lng': 106.6561462}, {'lat': 10.8265287, 'lng': 106.5933333}]
+                        const map = new google.maps.Map(document.getElementById('map'), {
+                            center: {lat: 10.813975039910598, lng: 106.64436107457777},
+                            zoom: 11
+                        });
+                        [[10.934274528828208, 106.87081524915541], [10.9243858, 106.7135795], [10.8833964, 106.6561462], [10.8265287, 106.5933333]].forEach(function (point,index) {
+                            var marker = new google.maps.Marker({
+                                position: new google.maps.LatLng(point[0], point[1]),
+                                map: map,
+                                label: (index + 1).toString()
+                            });
+                        });
+                        for (var i = 0, parts = [], max = 25 - 1; i < station.length; i = i + max)
+                            parts.push(station.slice(i, i + max + 1));
+
+                        var service_callback = function (response, status) {
+                            if (status != 'OK') {
+                                console.log('Directions request failed due to ' + status);
+                                return;
+                            }
+                            var renderer = new google.maps.DirectionsRenderer;
+                            renderer.setMap(map);
+                            renderer.setOptions({ suppressMarkers: true, preserveViewport: true });
+                            renderer.setDirections(response);
+                        };
+                        for (var i = 0; i < parts.length; i++) {
+                            var waypoints = [];
+                            for (var j = 1; j < parts[i].length - 1; j++)
+                                waypoints.push({ location: parts[i][j], stopover: false });
+                            var service_options = {
+                                origin: parts[i][0],
+                                destination: parts[i][parts[i].length - 1],
+                                waypoints: waypoints,
+                                travelMode: 'WALKING'
+                            };
+                            service.route(service_options, service_callback);
+                        }
+                    }
+                </script>
+            </head>
+            <body onload="initMap()">
+                <div id="map" style="height: 1000px; width: 100%;"></div>
+            </body>
+            </html>
+        

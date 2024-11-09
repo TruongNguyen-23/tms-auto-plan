@@ -1,0 +1,26 @@
+{
+  "startPoint": {
+    "lat": 10.7410835,
+    "lon": 106.70203763
+  },
+  "orders": [
+    {
+      "lat": 10.7400531,
+      "lon": 10.73252319
+    },
+    {
+      "lat": 10.73252319,
+      "lon": 106.70693794
+    },
+    {
+      "lat": 10.73769961,
+      "lon": 106.72571768
+    }
+  ],
+  "nameTSP": "Brand_Bound",
+  "startTime": "8:00",
+  "wattingBeforeTime": 20,
+  "wattingAfterTime": 5,
+  "serviceTime": 20,
+  "congestionWeight": 0.5
+}

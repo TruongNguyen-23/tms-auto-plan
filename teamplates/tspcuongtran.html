@@ -1,0 +1,136 @@
+
+        <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Route TSP</title>
+                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXiMLkRaq16MeTMVOFnYWqxDd0TCV3prU&libraries=geometry&callback=initMap" async defer"></script>
+                <script>
+                    const data = [['', '', 0, '10.934274528828208', '106.87081524915541', 0, 0, 0, '', '', '', '', ''], ['S1240300237', 'HAP', 1.0, '21.079044', '105.9200531', 100.0, 0.0, None, 'HAP', None, None, None, None], ['S1240300238', 'Yamaha Soc Son', 1.0, '21.3153395', '105.8730678', 100.0, 0.0, None, 'YMHSS', None, None, None, None], ['S1240300238', 'Yamaha Soc Son', 1.0, '21.3153395', '105.8730678', 100.0, 0.0, None, 'YMHSS', None, None, None, None]];
+                    function initMap() {
+                        const map = new google.maps.Map(document.getElementById('map'), {
+                            zoom: 5
+                        });
+
+                        const directionsService = new google.maps.DirectionsService();
+                        const directionsRenderer = new google.maps.DirectionsRenderer({
+                            map: map,
+                            suppressMarkers: true
+                        });
+                        
+                        const waypoints = data.map(pointOrder => ({
+                            location: new google.maps.LatLng(pointOrder[3], pointOrder[4])
+                        }));
+                        var currentInfoWindow = null;
+                        data.forEach(function (pointOrder, index) {
+                            var marker = new google.maps.Marker({
+                                position: new google.maps.LatLng(pointOrder[3], pointOrder[4]),
+                                map: map,
+                                animation: google.maps.Animation.DROP,
+                                label: (index + 1).toString()
+                            });
+                            marker.addListener('click', function () {
+                                var contentString = `<p>
+                                            Order No:&nbsp;${pointOrder[0]}</br>
+                                            Ship To Name:&nbsp;${pointOrder[1]}</br>
+                                            Ship To Address:&nbsp;${pointOrder[8]}
+                                            </p>`;
+                                var infoMaker = new google.maps.InfoWindow({content: contentString });
+                                if (currentInfoWindow != null) {
+                                    currentInfoWindow.close();
+                                }
+                                infoMaker.open(map, marker);
+                                currentInfoWindow = infoMaker;
+                            });
+                            marker.addListener('rightclick', function (event) {
+                                var contextMenu = new google.maps.InfoWindow();
+                                var contentString = '<div class="menu">' +
+                                    '<ul>' +
+                                    '<li id="deleteOrder">Delete Order</li><p class="line"></p>' +
+                                    '<li id="transferOrder">Transfer Order</li>' +
+                                    '</ul>' +
+                                    '</div>';
+                                contextMenu.setContent(contentString);
+                                contextMenu.setPosition(event.latLng);
+                                contextMenu.setOptions({ pixelOffset: new google.maps.Size(80, 100) });
+                                contextMenu.open(map);
+                                google.maps.event.addListener(contextMenu, 'domready', function () {
+                                    
+                                    var optionDelete = document.getElementById('deleteOrder');
+                                    if (optionDelete) {
+                                        optionDelete.addEventListener('click', function () {
+                                            // marker.setMap(null);
+                                            contextMenu.close();
+                                            raiseEvent("DELETE_ORDER");
+                                        });
+                                    }
+                                });
+                            });
+                            function raiseEvent(event) {
+                                result = {
+                                    "OrderId": pointOrder[7],
+                                    "EventName": event
+                                }
+                                window.chrome.webview.postMessage(JSON.stringify(result));
+                            }
+                        });
+                        const request = {
+                            origin: waypoints[0].location,
+                            destination: waypoints[waypoints.length - 1].location,
+                            waypoints: waypoints.slice(1, waypoints.length - 1),
+                            travelMode: google.maps.TravelMode.DRIVING
+                        };
+                
+                        
+                        directionsService.route(request, function(result, status) {
+                            if (status == 'OK') {
+                                directionsRenderer.setDirections(result);
+                            }
+                        });
+                    }
+                </script>
+            </head>
+            <body onload="initMap()">
+                <style>
+                    html,
+                     body {
+                        height: 100%;
+                        margin: 0;
+                        padding: 0;
+                    }
+                    .gm-style-iw-tc {
+                        display: none;
+                    }
+                
+                    .gm-style-iw-d {
+                        display: block;
+                    }
+                    .menu{
+                        border-radius: 5px;
+                        border: 1px solid lightgray;
+                    }
+                    .line{
+                        width: 125px;
+                        height: 1px;
+                        margin: 0;
+                        padding: 0;
+                        background-color: lightgray;
+                    }
+                    ul{
+                        text-align: center;
+                        list-style: none;
+                        padding: 0px;
+                        /* border: 1px solid red; */
+                    }
+                    li{
+                        margin: 5px;
+                        border: 1px;
+
+                    }
+                    li:hover{
+                        cursor: pointer;
+                    }
+                </style>
+                <div id="map" style="height: 100%; width: 100%;"></div>
+            </body>
+            </html>
+        

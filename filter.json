@@ -1,0 +1,68 @@
+{
+    "Filter": [
+        {
+            "Cluster": [
+                {
+                    "Code": "CT01",
+                    "Name": "K-Means"
+                },
+                {
+                    "Code": "CT02",
+                    "Name": "Mini Batch K-Means"
+                },
+                {
+                    "Code": "CT03",
+                    "Name": "Mean Shift"
+                },
+                {
+                    "Code": "CT04",
+                    "Name": "Gaussian Mixture"
+                },
+                {
+                    "Code": "CT05",
+                    "Name": "Multiple Pick Up"
+                }
+            ],
+            "Tsp": [
+                {
+                    "Code": "TP01",
+                    "Name": "Random Tour"
+                },
+                {
+                    "Code": "TP02",
+                    "Name": "Christofides"
+                },
+                {
+                    "Code": "TP03",
+                    "Name": "Ant Colony"
+                },
+                {
+                    "Code": "TP04",
+                    "Name": "Nearest Neighbor"
+                },
+                {
+                    "Code": "ALNS",
+                    "Name": "Adaptive Large Neighborhood Search"
+                }
+            ],
+            "MapType": [
+                {
+                    "Code": "M01",
+                    "Name": "Circle"
+                },
+                {
+                    "Code": "M02",
+                    "Name": "Polylines"
+                },
+                {
+                    "Code": "M03",
+                    "Name": "Polygon"
+                },
+                {
+                    "Code": "M04",
+                    "Name": "Direction Line Route"
+                }
+            ]
+        }
+    ]
+}
