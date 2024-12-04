@@ -6,21 +6,21 @@
                 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXiMLkRaq16MeTMVOFnYWqxDd0TCV3prU&callback=initMap" async defer></script>
                 <script>
                     async function initMap() {
-                        var centerCricle=[[10.93589543333333, 106.73401919999999], [10.7265277, 106.6371917], [10.846983833333335, 106.66163176666667], [10.7507075, 106.7363665], [10.9140933, 107.4028238], [10.639348125, 106.741186875], [10.9028025, 106.74646615], [10.9246162, 106.7349421], [10.837638969999999, 106.73063176000001], [10.778632566666666, 106.61864356666666], [10.960593, 106.8483173], [11.788420933333333, 108.36743873333334], [11.8175989, 106.98899040000002], [10.58738535, 105.9896092], [9.9372776, 105.6236585], [10.24818935, 106.19124975], [10.883396399999999, 106.65614619999998], [10.9243858, 106.7135795], [10.908992, 106.7405627], [10.896613, 106.7523696], [10.8833964, 106.65614620000001], [10.9119408, 106.7388775], [10.7145455, 105.1054449]];
-                        var tripNo=['Trip #1', 'Trip #2', 'Trip #3', 'Trip #4', 'Trip #5', 'Trip #6', 'Trip #7', 'Trip #8', 'Trip #9', 'Trip #10', 'Trip #11', 'Trip #12', 'Trip #13', 'Trip #14', 'Trip #15', 'Trip #16', 'Trip #3072447725', 'Trip #', 'Trip #3072447661', 'Trip #3072447660', 'Trip #3072447728', 'Trip #3072447705', 'Trip #3072447815'];
-                        var radius=[5431.843727532951, 0.0, 3054.302724910206, 0.0, 0.0, 2415.017057179222, 942.9601065619352, 0.0, 4559.370339277118, 6137.894826135755, 0.0, 10892.113325613647, 1.3846620871176133e-09, 66298.49907456106, 0.0, 22526.07656638102, 1.4004107287073302e-09, 0.0, 0.0, 0.0, 1.38920160058397e-09, 0.0, 0.0];
-                        var points=[[['4072674853', '10.9838047', '106.7243026', '34502305', 'Kho Bach Hoa Xanh Thuan An', 13802, '0', 'MT-Mall.Shop', '1'], ['4072674854', '10.9838047', '106.7243026', '34502305', 'Kho Bach Hoa Xanh Thuan An', 13803, '0', 'MT-Mall.Shop', '1'], ['4072674771', '10.9119408', '106.7388775', '34502420', 'MM MEGA MARKET (VIET NAM) SOUTH', 13767, '0', 'MT-Mall.Shop', '1'], ['4072674635', '10.9119408', '106.7388775', '34502420', 'MM MEGA MARKET (VIET NAM) SOUTH', 13758, '0', 'MT-Mall.Shop', '1'], ['4072674770', '10.9119408', '106.7388775', '34502420', 'MM MEGA MARKET (VIET NAM) SOUTH', 13766, '0', 'MT-Mall.Shop', '1'], ['4072674769', '10.9119408', '106.7388775', '34502420', 'MM MEGA MARKET (VIET NAM) SOUTH', 13765, '0', 'MT-Mall.Shop', '1']], [['4072674851', '10.7265277', '106.6371917', '34501856', 'TRI COOP DISTRIBUTORS (HCM)', 13800, '1', 'MT-Mall.Shop', '2']], [['4072674846', '10.8716637', '106.6493539', '34501707', 'CTy TNHH MOT THANH VIEN SAN XUAT CHE BIEN THUONG MAI DICH VU TUYEN PHAT', 13795, '2', 'GT-Traditional Market', '3'], ['4072674801', '10.8716637', '106.6493539', '34501707', 'CTy TNHH MOT THANH VIEN SAN XUAT CHE BIEN THUONG MAI DICH VU TUYEN PHAT', 13773, '2', 'GT-Traditional Market', '3'], ['4072674763', '10.8346439', '106.6677707', '34501437', 'CONG TY TNHH TRUNG TAM THUONG MAI LOTTE VIET NAM CHI NHANH GO VAP', 13764, '2', 'MT-Mall.Shop', '3'], ['4072674761', '10.8346439', '106.6677707', '34501437', 'CONG TY TNHH TRUNG TAM THUONG MAI LOTTE VIET NAM CHI NHANH GO VAP', 13762, '2', 'MT-Mall.Shop', '3'], ['4072674866', '10.8346439', '106.6677707', '34501437', 'CONG TY TNHH TRUNG TAM THUONG MAI LOTTE VIET NAM CHI NHANH GO VAP', 13808, '2', 'MT-Mall.Shop', '3'], ['4072674762', '10.8346439', '106.6677707', '34501437', 'CONG TY TNHH TRUNG TAM THUONG MAI LOTTE VIET NAM CHI NHANH GO VAP', 13763, '2', 'MT-Mall.Shop', '3']], [['4072674827', '10.7507075', '106.7363665', '34502232', 'CONG TY TNHH MOT THANH VIEN THUONG MAI DICH VU NGOC TAN TAI', 13784, '3', 'GT-Traditional Market', '4']], [['4072674800', '10.9140933', '107.4028238', '34501461', 'CONG TY TNHH NGUYEN KIEU OANH ', 13772, '4', 'GT-Traditional Market', '5'], ['4072674729', '10.9140933', '107.4028238', '34501461', 'CONG TY TNHH NGUYEN KIEU OANH ', 13761, '4', 'GT-Traditional Market', '5']], [['4072674841', '10.6414034', '106.7341238', '34503518', 'Kho Onpoint Nha Be', 13793, '5', 'MT-Mall.Shop', '6'], ['4072674842', '10.6414034', '106.7341238', '34503518', 'Kho Onpoint Nha Be', 13794, '5', 'MT-Mall.Shop', '6'], ['4072674840', '10.6414034', '106.7341238', '34503518', 'Kho Onpoint Nha Be', 13792, '5', 'MT-Mall.Shop', '6'], ['4072674852', '10.6331823', '106.7623761', '34502379', 'CONG TY CO PHAN THUONG MAI BACH HOA XANH', 13801, '5', 'MT-Mall.Shop', '6']], [['4072674807', '10.896613', '106.7523696', '34502980', 'Con Cung Kho so 1 Rhenus', 13779, '6', 'MT-Mall.Shop', '7'], ['4072674804', '10.908992', '106.7405627', '34501776', 'Con Cung Kho 22 ICD', 13776, '6', 'MT-Mall.Shop', '7']], [['4072674797', '10.9246162', '106.7349421', '34501770', 'NPP Phan Ngoc', 13769, '7', 'GT-Traditional Market', '8'], ['4072674798', '10.9246162', '106.7349421', '34501770', 'NPP Phan Ngoc', 13770, '7', 'GT-Traditional Market', '8']], [['4072674803', '10.8273308', '106.7710383', '34501877', 'CONG TY TNHH THUONG MAI PHAM THANH', 13775, '8', 'GT-Traditional Market', '9'], ['4072674802', '10.8273308', '106.7710383', '34501877', 'CONG TY TNHH THUONG MAI PHAM THANH', 13774, '8', 'GT-Traditional Market', '9'], ['4072674847', '10.8273308', '106.7710383', '34501877', 'CONG TY TNHH THUONG MAI PHAM THANH', 13796, '8', 'GT-Traditional Market', '9'], ['4072674821', '10.8160719', '106.7057733', '34810003', 'CONG TY TNHH KIMBERLY CLARK VIET NA', 13757, '8', 'GT-Traditional Market', '9'], ['4072674904', '10.8160719', '106.7057733', '34810002', 'CONG TY TNHH KIMBERLY CLARK VIET NA', 13834, '8', 'GT-Traditional Market', '9'], ['4072674765', '10.8160719', '106.7057733', '34810004', 'CONG TY TNHH KIMBERLY CLARK VIET NA', 13756, '8', 'GT-Traditional Market', '9'], ['4072674857', '10.8615454', '106.7189707', '34501538', 'CHI NHANH TAI THANH PHO HO CHI MINH- CONG TY CO PHAN BIBOMART TM', 13806, '8', 'MT-Mall.Shop', '9'], ['4072674640', '10.8615454', '106.7189707', '34501538', 'CHI NHANH TAI THANH PHO HO CHI MINH- CONG TY CO PHAN BIBOMART TM', 13760, '8', 'MT-Mall.Shop', '9'], ['4072674639', '10.8615454', '106.7189707', '34501538', 'CHI NHANH TAI THANH PHO HO CHI MINH- CONG TY CO PHAN BIBOMART TM', 13759, '8', 'MT-Mall.Shop', '9'], ['4072674858', '10.8615454', '106.7189707', '34501538', 'CHI NHANH TAI THANH PHO HO CHI MINH- CONG TY CO PHAN BIBOMART TM', 13807, '8', 'MT-Mall.Shop', '9']], [['4072674850', '10.7265277', '106.6371917', '34501856', 'TRI COOP DISTRIBUTORS (HCM)', 13799, '9', 'MT-Mall.Shop', '10'], ['4072674849', '10.804685', '106.6093695', '34503461', 'Imexco Tan Binh', 13798, '9', 'GT-Traditional Market', '10'], ['4072674848', '10.804685', '106.6093695', '34503461', 'Imexco Tan Binh', 13797, '9', 'GT-Traditional Market', '10']], [['4072674799', '10.960593', '106.8483173', '34501287', 'CONG TY TNHH HONG TRUNG NGHIA', 13771, '10', 'GT-Traditional Market', '11']], [['4072674899', '11.7910698', '108.2674092', '34501288', 'CONG TY TNHH TM DV THANH HA GIANG ', 13821, '11', 'GT-Traditional Market', '12'], ['4072674884', '11.7870965', '108.4174535', '34502400', 'CONG TY CO PHAN THUONG MAI BACH HOA XANH', 13816, '11', 'MT-Mall.Shop', '12'], ['4072674882', '11.7870965', '108.4174535', '34502400', 'CONG TY CO PHAN THUONG MAI BACH HOA XANH', 13815, '11', 'MT-Mall.Shop', '12']], [['4072674912', '11.8175989', '106.9889904', '34502310', 'NPP Truong Huy', 13833, '12', 'GT-Traditional Market', '13'], ['4072674910', '11.8175989', '106.9889904', '34502310', 'NPP Truong Huy', 13831, '12', 'GT-Traditional Market', '13'], ['4072674907', '11.8175989', '106.9889904', '34502310', 'NPP Truong Huy', 13828, '12', 'GT-Traditional Market', '13'], ['4072674905', '11.8175989', '106.9889904', '34502310', 'NPP Truong Huy', 13826, '12', 'GT-Traditional Market', '13'], ['4072674909', '11.8175989', '106.9889904', '34502310', 'NPP Truong Huy', 13830, '12', 'GT-Traditional Market', '13'], ['4072674906', '11.8175989', '106.9889904', '34502310', 'NPP Truong Huy', 13827, '12', 'GT-Traditional Market', '13'], ['4072674911', '11.8175989', '106.9889904', '34502310', 'NPP Truong Huy', 13832, '12', 'GT-Traditional Market', '13'], ['4072674908', '11.8175989', '106.9889904', '34502310', 'NPP Truong Huy', 13829, '12', 'GT-Traditional Market', '13']], [['4072674887', '10.2520293', '105.5122694', '34502491', 'Kho Bach hoa Xanh Thot Not', 13819, '13', 'MT-Mall.Shop', '14'], ['4072674822', '10.8218145', '106.4570859', '34503520', 'NPP Nguyen Vinh', 13783, '13', 'GT-Traditional Market', '14'], ['4072674900', '10.3939617', '105.4228386', '34500710', 'NPP Dai Tin', 13822, '13', 'GT-Traditional Market', '14'], ['4072674855', '10.876061', '106.5205908', '34503563', 'Kho Bach Hoa Xanh Xuyen A', 13804, '13', 'MT-Mall.Shop', '14'], ['4072674856', '10.876061', '106.5205908', '34503563', 'Kho Bach Hoa Xanh Xuyen A', 13805, '13', 'MT-Mall.Shop', '14'], ['4072674903', '10.3043846', '105.5042797', '34500522', 'NPP Ngoc Thu', 13825, '13', 'GT-Traditional Market', '14']], [['4072674886', '9.9372776', '105.6236585', '34502399', 'Kho Bach Hoa Xanh Chau Thanh A', 13818, '14', 'MT-Mall.Shop', '15'], ['4072674885', '9.9372776', '105.6236585', '34502399', 'Kho Bach Hoa Xanh Chau Thanh A', 13817, '14', 'MT-Mall.Shop', '15']], [['4072674902', '10.2316315', '105.9860777', '34500620', 'NPP Huyen Nga', 13824, '15', 'GT-Traditional Market', '16'], ['4072674888', '10.2647472', '106.3964218', '34502516', 'Kho Bach Hoa Xanh Ben Tre', 13820, '15', 'MT-Mall.Shop', '16']], [['4072674837', '10.8833964', '106.6561462', '34503482', 'CONG TY TNHH MTV SAN XUAT CHE BIEN THUONG MAI DICH VU TUYEN PHAT', 13789, '16', 'GT-Traditional Market', '17'], ['4072674833-1', '10.8833964', '106.6561462', '34503482', 'CONG TY TNHH MTV SAN XUAT CHE BIEN THUONG MAI DICH VU TUYEN PHAT', 13810, '16', 'GT-Traditional Market', '17'], ['4072674835', '10.8833964', '106.6561462', '34503482', 'CONG TY TNHH MTV SAN XUAT CHE BIEN THUONG MAI DICH VU TUYEN PHAT', 13787, '16', 'GT-Traditional Market', '17'], ['4072674834-1', '10.8833964', '106.6561462', '34503482', 'CONG TY TNHH MTV SAN XUAT CHE BIEN THUONG MAI DICH VU TUYEN PHAT', 13811, '16', 'GT-Traditional Market', '17'], ['4072674833', '10.8833964', '106.6561462', '34503482', 'CONG TY TNHH MTV SAN XUAT CHE BIEN THUONG MAI DICH VU TUYEN PHAT', 13785, '16', 'GT-Traditional Market', '17'], ['4072674836', '10.8833964', '106.6561462', '34503482', 'CONG TY TNHH MTV SAN XUAT CHE BIEN THUONG MAI DICH VU TUYEN PHAT', 13788, '16', 'GT-Traditional Market', '17'], ['4072674834', '10.8833964', '106.6561462', '34503482', 'CONG TY TNHH MTV SAN XUAT CHE BIEN THUONG MAI DICH VU TUYEN PHAT', 13786, '16', 'GT-Traditional Market', '17'], ['4072674837-1', '10.8833964', '106.6561462', '34503482', 'CONG TY TNHH MTV SAN XUAT CHE BIEN THUONG MAI DICH VU TUYEN PHAT', 13812, '16', 'GT-Traditional Market', '17']], [['4072674786', '10.9243858', '106.7135795', '34501716', 'LIEN HIEP HTX THUONG MAI TP.HCM, KHO 805: CONG TY CP KHO HANG HOA U&I', 13754, '17', 'MT-Coop', '18'], ['4072674766', '10.9243858', '106.7135795', '34501716', 'LIEN HIEP HTX THUONG MAI TP.HCM, KHO 805: CONG TY CP KHO HANG HOA U&I', 13751, '17', 'MT-Coop', '18'], ['4072674784', '10.9243858', '106.7135795', '34501716', 'LIEN HIEP HTX THUONG MAI TP.HCM, KHO 805: CONG TY CP KHO HANG HOA U&I', 13752, '17', 'MT-Coop', '18'], ['4072674787', '10.9243858', '106.7135795', '34501716', 'LIEN HIEP HTX THUONG MAI TP.HCM, KHO 805: CONG TY CP KHO HANG HOA U&I', 13755, '17', 'MT-Coop', '18'], ['4072674785', '10.9243858', '106.7135795', '34501716', 'LIEN HIEP HTX THUONG MAI TP.HCM, KHO 805: CONG TY CP KHO HANG HOA U&I', 13753, '17', 'MT-Coop', '18']], [['4072674805', '10.908992', '106.7405627', '34501776', 'Con Cung Kho 22 ICD', 13777, '18', 'MT-Mall.Shop', '19'], ['4072674806', '10.908992', '106.7405627', '34501776', 'Con Cung Kho 22 ICD', 13778, '18', 'MT-Mall.Shop', '19']], [['4072674809', '10.896613', '106.7523696', '34502980', 'Con Cung Kho so 1 Rhenus', 13780, '19', 'MT-Mall.Shop', '20'], ['4072674811', '10.896613', '106.7523696', '34502980', 'Con Cung Kho so 1 Rhenus', 13782, '19', 'MT-Mall.Shop', '20'], ['4072674810-1', '10.896613', '106.7523696', '34502980', 'Con Cung Kho so 1 Rhenus', 13809, '19', 'MT-Mall.Shop', '20'], ['4072674810', '10.896613', '106.7523696', '34502980', 'Con Cung Kho so 1 Rhenus', 13781, '19', 'MT-Mall.Shop', '20']], [['4072674839', '10.8833964', '106.6561462', '34503482', 'CONG TY TNHH MTV SAN XUAT CHE BIEN THUONG MAI DICH VU TUYEN PHAT', 13791, '20', 'GT-Traditional Market', '21'], ['4072674838-1', '10.8833964', '106.6561462', '34503482', 'CONG TY TNHH MTV SAN XUAT CHE BIEN THUONG MAI DICH VU TUYEN PHAT', 13813, '20', 'GT-Traditional Market', '21'], ['4072674838', '10.8833964', '106.6561462', '34503482', 'CONG TY TNHH MTV SAN XUAT CHE BIEN THUONG MAI DICH VU TUYEN PHAT', 13790, '20', 'GT-Traditional Market', '21']], [['4072674772', '10.9119408', '106.7388775', '34502420', 'MM MEGA MARKET (VIET NAM) SOUTH', 13768, '21', 'MT-Mall.Shop', '22'], ['4072674772-1', '10.9119408', '106.7388775', '34502420', 'MM MEGA MARKET (VIET NAM) SOUTH', 13814, '21', 'MT-Mall.Shop', '22']], [['4072674901', '10.7145455', '105.1054449', '34502312', 'NPP Tan Tan Thanh', 13823, '22', 'GT-Traditional Market', '23']]];
+                        var centerCricle=[[11.1112365, 106.35512895]];
+                        var tripNo=['Trip #1'];
+                        var radius=[27865.82422730911];
+                        var points=[[['4072660279', '11.122473', '106.6102579', '34503317', 'NPP Bich Tram', 64, '0', 'GT-Traditional Market', '1'], ['', '10.996151222874035', '106.87346156288686', '', '', 68, '0', '', '1'], ['4072660279', '11.1', '106.1', '34503317', 'NPP Bich Tram', 1, '0', 'GT-Traditional Market', '1'], ['', '10.996151222874035', '106.87346156288686', '', '', 51, '0', '', '1']]];
                         const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
                         const pathIcon="https://www.google.com/mapfiles/marker_green.png";
                         var bounds = new google.maps.LatLngBounds();
                         var directionsService = new google.maps.DirectionsService;
                         var map = new google.maps.Map(document.getElementById('map'), {
-                            center: {lat: 10.93589543333333, lng: 106.73401919999999},
+                            center: {lat: 11.1112365, lng: 106.35512895},
                             mapId: "4504f8b37365c3d0",
                             zoom: 5
                         });
-                        var typeMap = "M01";
-                        var colorMaker = ['#3b5998', '#dc4e41', '#bd081c', '#0077b5', '#3399ff', '#eb4924', '#00405d', '#45668e', '#ef4056', '#ed812b', '#43d854', '#fffa37', '#97FFFF', '#8B4513', '#CD853F', '#473C8B', '#CAFF70', '#FFB90F', '#FF6A6A', '#FF8247', '#CD4F39', '#DDC488', '#9a60d8']
+                        var typeMap = "M02";
+                        var colorMaker = ['#3b5998']
                         var circles = [];
                         var infoWindows = [];
                         var labelTrip = [];
@@ -30,6 +30,7 @@
                         var number=-1;
                         var MAX_WAYPOINTS_EXCEEDED = 0;
                         var duplicatePoint = [];
+                        var pickUp = [10.996151222874035, 106.87346156288686]
                         drawTypeCluster()
                         function arrayEquals(a, b) {
                             return a.length === b.length && a.every((val, i) => val === b[i]);
@@ -38,6 +39,7 @@
                             points.forEach(function (point,idx) {
                                 var pointUnique=removeLocationDuplicate(point);
                                 showPoint(pointUnique,idx);
+                                show_location_pick_up();
                             });
                             function removeLocationDuplicate(points){
                                 const map = new Map();
@@ -53,6 +55,19 @@
                                 const result = Array.from(map.values());
                                 return result
                             }
+                            function show_location_pick_up() {
+                                if(typeMap){
+                                    const pinBackground = new PinElement({
+                                        glyphColor: "yellow"
+                                    });
+                                    var markerViewBackground = new AdvancedMarkerElement({
+                                        map,
+                                        position: { lat: pickUp[0], lng: pickUp[1] },
+                                        content: pinBackground.element,
+                                        //gmpDraggable: true
+                                    });
+                                }
+                            }
                             function showPoint(point,idx) {
                                 point.forEach(function (location, index) {
                                     locationDuplicate = [location[1], location[2]];
@@ -61,17 +76,24 @@
                                     }
                                     else{
                                         duplicatePoint.push(locationDuplicate);
-                                        const pinBackground = new PinElement({
+                                        location_ = [parseFloat(location[1]), parseFloat(location[2])];
+                                         if (location_[0] == pickUp[0] && location_[1] == pickUp[1]) {
+                                            return
+                                        }
+                                        else{
+                                            const pinBackground = new PinElement({
                                             background: colorMaker[idx],    
                                             borderColor: colorMaker[idx],
                                             glyphColor: "#EEEEEE"
-                                        });
-                                        var markerViewBackground = new AdvancedMarkerElement({
-                                            map,
-                                            position: {lat: parseFloat(location[1]), lng: parseFloat(location[2])},
-                                            content: pinBackground.element,
-                                            //gmpDraggable: true
-                                        });
+                                            });
+                                            var markerViewBackground = new AdvancedMarkerElement({
+                                                map,
+                                                position: {lat: parseFloat(location[1]), lng: parseFloat(location[2])},
+                                                content: pinBackground.element,
+                                                //gmpDraggable: true
+                                            });
+                                        }
+                                        
                                     }
 
                                     markerViewBackground.addListener('click', function () {
@@ -241,8 +263,8 @@
                         }
                         function drawTypeCluster(){
                              if (typeMap == "M01"){
-                                for (var i = 0; i < 23; i++) {
-                                    var center = new google.maps.LatLng([[10.93589543333333, 106.73401919999999], [10.7265277, 106.6371917], [10.846983833333335, 106.66163176666667], [10.7507075, 106.7363665], [10.9140933, 107.4028238], [10.639348125, 106.741186875], [10.9028025, 106.74646615], [10.9246162, 106.7349421], [10.837638969999999, 106.73063176000001], [10.778632566666666, 106.61864356666666], [10.960593, 106.8483173], [11.788420933333333, 108.36743873333334], [11.8175989, 106.98899040000002], [10.58738535, 105.9896092], [9.9372776, 105.6236585], [10.24818935, 106.19124975], [10.883396399999999, 106.65614619999998], [10.9243858, 106.7135795], [10.908992, 106.7405627], [10.896613, 106.7523696], [10.8833964, 106.65614620000001], [10.9119408, 106.7388775], [10.7145455, 105.1054449]][i][0], [[10.93589543333333, 106.73401919999999], [10.7265277, 106.6371917], [10.846983833333335, 106.66163176666667], [10.7507075, 106.7363665], [10.9140933, 107.4028238], [10.639348125, 106.741186875], [10.9028025, 106.74646615], [10.9246162, 106.7349421], [10.837638969999999, 106.73063176000001], [10.778632566666666, 106.61864356666666], [10.960593, 106.8483173], [11.788420933333333, 108.36743873333334], [11.8175989, 106.98899040000002], [10.58738535, 105.9896092], [9.9372776, 105.6236585], [10.24818935, 106.19124975], [10.883396399999999, 106.65614619999998], [10.9243858, 106.7135795], [10.908992, 106.7405627], [10.896613, 106.7523696], [10.8833964, 106.65614620000001], [10.9119408, 106.7388775], [10.7145455, 105.1054449]][i][1]);
+                                for (var i = 0; i < 1; i++) {
+                                    var center = new google.maps.LatLng([[11.1112365, 106.35512895]][i][0], [[11.1112365, 106.35512895]][i][1]);
                                     var circle = new google.maps.Circle({
                                     center: center,
                                     radius: radius[i],
@@ -466,7 +488,7 @@
                         window.chrome.webview.postMessage(JSON.stringify(result));
                     }
                     showData()
-                    splitOrderCluster()
+                    // splitOrderCluster()
                     }
                 </script>
                     <style>

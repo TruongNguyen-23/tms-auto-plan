@@ -42,6 +42,7 @@ def calculate_total_capacity(trip, index):
 def remove_order_in_trips(trip, order, equipment, index):
     remove = False
     orders = []
+    
     while not remove:
         weight = sum(value[index] for value in trip)
         if weight > equipment and trip != [] and len(trip) > 1:

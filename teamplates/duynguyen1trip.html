@@ -9,12 +9,12 @@
                     const end_Point=106.87081524915541
                     function initMap() {
                         const service = new google.maps.DirectionsService;
-                        const station=[{'lat': 10.934274528828208, 'lng': 106.87081524915541}, {'lat': 10.9243858, 'lng': 106.7135795}, {'lat': 10.8833964, 'lng': 106.6561462}, {'lat': 10.8265287, 'lng': 106.5933333}]
+                        const station=[{'lat': 10.934274528828208, 'lng': 106.87081524915541}, {'lat': 11.122473, 'lng': 106.6102579}]
                         const map = new google.maps.Map(document.getElementById('map'), {
                             center: {lat: 10.813975039910598, lng: 106.64436107457777},
                             zoom: 11
                         });
-                        [[10.934274528828208, 106.87081524915541], [10.9243858, 106.7135795], [10.8833964, 106.6561462], [10.8265287, 106.5933333]].forEach(function (point,index) {
+                        [[10.934274528828208, 106.87081524915541], [11.122473, 106.6102579]].forEach(function (point,index) {
                             var marker = new google.maps.Marker({
                                 position: new google.maps.LatLng(point[0], point[1]),
                                 map: map,
@@ -50,7 +50,15 @@
                 </script>
             </head>
             <body onload="initMap()">
-                <div id="map" style="height: 1000px; width: 100%;"></div>
+                <style>
+                    html,
+                     body {
+                        height: 100%;
+                        margin: 0;
+                        padding: 0;
+                    }
+                </style>
+                <div id="map" style="height: 100%; width: 100%;"></div>
             </body>
             </html>
         

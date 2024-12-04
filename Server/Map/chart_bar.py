@@ -4,13 +4,18 @@ class TripChart:
     def __init__(self):
         self.color = get_color_template()
 
-    def show_chart(self, quality, capacity, equipment, label):
-        qty, weight, volume = quality
-        # capacity = input_data["CapacityFactor"]
-        # equipment = input_data["EquipmentType"] 
+    def show_chart(self, trips, input_data):
+        """
+        """
+        qty, weight, volume = trips["Quality"]
+        
+        label = trips["LabelTripNo"]
+        
+        capacity = input_data["CapacityFactor"]
+        equipment = input_data["EquipmentType"]         
         def role_chart():
             result = []
-            title = []
+            title = []  
             if capacity == None or capacity == "":
                 abort(400, "Capacity cannot be empty")
             elif capacity == "W":

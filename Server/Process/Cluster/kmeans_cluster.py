@@ -2,7 +2,7 @@
 
 # sys.path.append("E:\TMS_PLAN\API\Server\Process")
 from Server.Process.Handle.handle_file import save_file, save_content_cluster_cache
-from Server.Process.ActionUser.action_calculate_time import random_color_for_trip
+from Server.Process.ActionUser.action_calculate_time import *
 from Server.TravelingSalesmanProblem.nearest_neighbor import NearestNeighbor
 from Server.Process.Distance.distance_Matrix import DistanceMatrix
 from Server.TemplateDefault.cluster_default import ClusterDefault
@@ -81,20 +81,32 @@ class Process_Data:
 
         random_color_for_trip(len(trips["Trip"]))
         html_cluster = MapCluster().show_map(trips, self.tripNo, self.mode_draw)
-        html_chart_cluster = TripChart().show_chart(trips["Quality"], self.data_input["CapacityFactor"],self.data_input["EquipmentType"], self.tripNo)
+        html_chart_cluster = TripChart().show_chart(trips, self.data_input)
         
         save_file(html_cluster, self.cluster_file)
         save_file(html_chart_cluster, self.chart_file)
         save_content_cluster_cache(html_cluster, self.cluster_file)
         
+        # function remove data start point
+        trips = self.remove_data_start_point_in_trips(trips)
         # clear compile for project
         # clear_cache_compile()
         return self.mapping_result_data(trips, time_start)
     
+    def remove_data_start_point_in_trips(self, trips):
+        for items in trips["Trip"]:
+            for item in items:
+                if item["OrderNo"] == "":
+                    items.remove(item)
+        return trips
+    
     def handle_data_order(self, data):
-        request_data = requests.get(self.url_start_point).json()
-        start_lat = request_data["Lat"]
-        start_lon = request_data["Lon"]
+        # request_data = requests.get(self.url_start_point).json()
+        # start_lat = request_data["Lat"]
+        # start_lon = request_data["Lon"]
+        start_lat = data["PickupLat"]
+        start_lon = data["PickupLon"]
+       
         self.start_point = [float(start_lat),float(start_lon)]
         
         user_id = data["UserID"]
@@ -119,12 +131,12 @@ class Process_Data:
             self.data_input["TripOutTown"] = trip_sub_route
         else:
             equipment_type = self.handle_data_equipment_type(order_cluster)
-            suggest_cluster = Suggest.suggest_number_cluster(equipment_type)
+            # suggest_cluster = Suggest.suggest_number_cluster(equipment_type)
         
         if self.data_input["SplitCapacity"] is False:
             order_cluster = data["Orders"]
             
-        self.data_input["Suggest"] = suggest_cluster
+        # self.data_input["Suggest"] = suggest_cluster
         self.data_input["DataEquipmentType"] = equipment_type
         self.data_input["Trips"] = trip_sub_route
     
@@ -139,7 +151,7 @@ class Process_Data:
     def handle_data_equipment_type(self, order):
         keys = ["OrderNo","Lat","Lon","Qty","Weight",
                 "Volume","AreaDesc","ShipToCode",
-                "ShipTo","OrderId","AreaCode"]
+                "ShipTo","OrderId","AreaCode","ParentAreaCode"]
         orders = []
         
         for item in order:
@@ -189,9 +201,26 @@ class Process_Data:
             "Weight": [],
             "Volume":[],
             "Qty": [],
-            "PointRadius":[]
+            "PointRadius":[],
+            "PickUp":[]
+            }
+        if self.start_point:
+            data_start_point = {
+                "OrderNo":"",
+                "Lat":str(self.start_point[0]),
+                "Lon":str(self.start_point[1]),
+                "ShipToCode":"",
+                "ShipTo":"",
+                "OrderId":"",
+                "ShipToType":"",
+                "Weight":0,
+                "Volume":0,
+                "Qty":0
             }
         for index, items in enumerate(trips):
+            if self.mode_draw != "M01":
+                items.insert(0, data_start_point)
+            
             trip_no = f"Trip #{index + 1}"
             data["TripOrders"].append(trip_no)
             self.tripNo.append(trip_no)
@@ -202,16 +231,18 @@ class Process_Data:
             
             data["Centroid"].append(centerPoint)
             data["PointRadius"].append(temp_point)
-            points.insert(0, self.start_point)
+            # points.insert(0, self.start_point)
             data["Points"].append(points)
             
             total_weight = 0
             total_volume = 0
             total_qty = 0
+            
             for item in items:
                 total_qty += item["Qty"]
                 total_weight += item["Weight"]
                 total_volume += item["Volume"]
+                
             data["Weight"].append(total_weight)
             data["Volume"].append(total_volume)
             data["Qty"].append(total_qty)
@@ -219,15 +250,20 @@ class Process_Data:
             
         if data["Points"] != [] and data["Centroid"] != []:
             
-            data["Direction"] = self.calculate_route_distance(data["Points"])
+            data["Direction"], route_path = self.calculate_route_distance(data["Points"])
+            
             data["Radius"] = DistanceMatrix.calculate_radius_cluster(data["PointRadius"], data["Centroid"])
             
         elif data["Points"] == []:
             data["Direction"] = []
             data["Radius"] = []
+            
         data["StartPoint"] = self.start_point
-        data["Trip"] = trips
-        data["Quality"] = [data["Qty"],data["Weight"],data["Volume"]]    
+        data["LabelTripNo"] = self.tripNo
+        # data["Trip"] = trips
+        data["Trip"] = self.convent_data_trips_route_path(trips, route_path)
+        
+        data["Quality"] = [data["Qty"],data["Weight"],data["Volume"]]
         return data
 
     def equipment_capacity_factor(self, data):
@@ -517,14 +553,16 @@ class Process_Data:
         """
         start_index = 0
         direction = []
+        route_path = [] 
         for items in point:
             if items != []:
                 distance = DistanceMatrix.calculate_distances(items)
                 path, cost = NearestNeighbor.tsp_nearest_neighbor(distance, start_index, items, False, True)
             else:
                 cost = 0
+            route_path.append(path)
             direction.append(round(cost, 3))
-        return direction
+        return direction, route_path
 
     def set_value_data_point(self, data, labels, number_cluster):
         """
@@ -539,5 +577,26 @@ class Process_Data:
             if item != []:
                 data_convent.append(item)
         return data_convent
+    
+    def convent_data_trips_route_path(self, trips, routes):
+        """
+            
+        """     
+        new_trip = []
+        for trip, route in zip(trips,routes):
+            temp_trip = []
+            for item_route in route:
+                lat_route = str(item_route[0])
+                lon_route = str(item_route[1])
+                for i in reversed(range(len(trip))):
+                    lat_trip = trip[i]["Lat"]
+                    lon_trip = trip[i]["Lon"]
+                    if lat_route == lat_trip and lon_route == lon_trip:
+                        temp_trip.append(trip[i])
+                        del trip[i]
+            if temp_trip and temp_trip not in new_trip:
+                new_trip.append(temp_trip)
+        return new_trip
+        
     
 

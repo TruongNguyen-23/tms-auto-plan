@@ -15,7 +15,7 @@ def group_trip_with_drop_points(order, trips, equipment, capacity, kilometer, dr
         for i in range(len(order)):
             arr = {"Distance":[]}
             for j in range(len(trips)):
-                capacity_order, location_order, centroid_order= capacity_for_trip(order[i],mode_index)
+                capacity_order, location_order, centroid_order = capacity_for_trip(order[i],mode_index)
                 capacity_trip, location_trip, centroid_trip = capacity_for_trip(trips[j],mode_index)
                 distance = DistanceMatrix.haversine_distance(centroid_order, centroid_trip)
                 # function drops point

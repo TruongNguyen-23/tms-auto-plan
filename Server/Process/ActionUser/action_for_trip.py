@@ -60,14 +60,15 @@ def group_trip(order, trips, equipment, capacity, kilometer, drops):
     Function group data trip single have weight < equipment,a
     And use kilometer distance nears to group trip
     """
-    # km_distance_near = 11 
+    # km_distance_near = 11
     mode_index = get_number_mode_capacity(capacity)
-    
+    # order = test_sort(order)
+    # trips = test_sort(trips)
     while order:
         for i in range(len(order)):
             arr = {"Distance":[]}
             for j in range(len(trips)):
-                capacity_order, location_order, centroid_order= capacity_for_trip(order[i],mode_index)
+                capacity_order, location_order, centroid_order = capacity_for_trip(order[i],mode_index)
                 
                 capacity_trip, location_trip, centroid_trip = capacity_for_trip(trips[j],mode_index)
                 distance = DistanceMatrix.haversine_distance(centroid_order, centroid_trip)
@@ -88,8 +89,16 @@ def group_trip(order, trips, equipment, capacity, kilometer, drops):
             if arr["Distance"]:
                 min_distance_key = min(arr['Distance'], key=lambda x: list(x.values())[0])
                 min_key = int(list(min_distance_key.keys())[0])
-                trips[min_key].extend(order[i])
+                # 14/11/2024
+                # trips[min_key].extend(order[i])
+                # order.remove(order[i])
+                
+                if check_area_in_merge(order[i],trips[min_key]):
+                    trips[min_key].extend(order[i])
+                else:
+                    trips.append(order[i])
                 order.remove(order[i])
+        
                 break
             else:
                 if len(order[i]) > 0:
@@ -98,6 +107,37 @@ def group_trip(order, trips, equipment, capacity, kilometer, drops):
                     order.remove(order[i])
                     break
     return trips
+
+def test_sort(data):
+    flat_data = [item for sublist in data for item in sublist]
+
+
+    sorted_flat_data = sorted(flat_data, key=lambda x: x[-1],reverse=True)
+
+
+    sorted_data = []
+    for item in sorted_flat_data:
+        if not sorted_data or sorted_data[-1][0][-1] != item[-1]:
+            sorted_data.append([item])
+        else:
+            sorted_data[-1].append(item)
+    return sorted_data
+def check_area_in_merge(trip_prev, trip_next):
+    area_prev = ','.join(get_location_area(trip_prev))
+    area_next = ','.join(get_location_area(trip_next))
+    def check_(prev, next):
+        if prev in next:
+            return True
+        else:
+            return False
+    if len(area_prev) > len(area_next):
+        return check_(area_next,area_prev)
+    else:
+        return check_(area_prev, area_next)
+        
+def get_location_area(data):
+    location_area = [items[-1] for items in data]
+    return location_area
 
 def set_default_data(data):
     """
@@ -132,7 +172,7 @@ def user_action_trip(data):
         template = f.read()
         template_string = template
     insertion = f"""
-        var numberTrip = tripNo.indexOf("{trip}");;
+        var numberTrip = tripNo.indexOf("{trip}");
         var boundsTrip = new google.maps.LatLngBounds();
         number = numberTrip;
         if (numberTrip || numberTrip == 0){{

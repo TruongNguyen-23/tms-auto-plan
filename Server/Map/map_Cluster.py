@@ -25,6 +25,7 @@ class MapCluster:
 
     def set_data_map_cluster(self, data):
         dict_data_trip = {}
+        dict_data_trip["StartPoint"] = data[0]["StartPoint"]
         dict_data_trip["Trip"] = data[0]["Trip"]
         dict_data_trip["Radius"] = data[0]["Radius"]
         dict_data_trip["Centroid"] = data[0]["Centroid"]
@@ -99,6 +100,7 @@ class MapCluster:
                         var number=-1;
                         var MAX_WAYPOINTS_EXCEEDED = 0;
                         var duplicatePoint = [];
+                        var pickUp = {cluster["StartPoint"]}
                         drawTypeCluster()
                         function arrayEquals(a, b) {{
                             return a.length === b.length && a.every((val, i) => val === b[i]);
@@ -107,6 +109,7 @@ class MapCluster:
                             points.forEach(function (point,idx) {{
                                 var pointUnique=removeLocationDuplicate(point);
                                 showPoint(pointUnique,idx);
+                                show_location_pick_up();
                             }});
                             function removeLocationDuplicate(points){{
                                 const map = new Map();
@@ -122,6 +125,19 @@ class MapCluster:
                                 const result = Array.from(map.values());
                                 return result
                             }}
+                            function show_location_pick_up() {{
+                                if(typeMap){{
+                                    const pinBackground = new PinElement({{
+                                        glyphColor: "yellow"
+                                    }});
+                                    var markerViewBackground = new AdvancedMarkerElement({{
+                                        map,
+                                        position: {{ lat: pickUp[0], lng: pickUp[1] }},
+                                        content: pinBackground.element,
+                                        //gmpDraggable: true
+                                    }});
+                                }}
+                            }}
                             function showPoint(point,idx) {{
                                 point.forEach(function (location, index) {{
                                     locationDuplicate = [location[1], location[2]];
@@ -130,17 +146,24 @@ class MapCluster:
                                     }}
                                     else{{
                                         duplicatePoint.push(locationDuplicate);
-                                        const pinBackground = new PinElement({{
+                                        location_ = [parseFloat(location[1]), parseFloat(location[2])];
+                                         if (location_[0] == pickUp[0] && location_[1] == pickUp[1]) {{
+                                            return
+                                        }}
+                                        else{{
+                                            const pinBackground = new PinElement({{
                                             background: colorMaker[idx],    
                                             borderColor: colorMaker[idx],
                                             glyphColor: "#EEEEEE"
-                                        }});
-                                        var markerViewBackground = new AdvancedMarkerElement({{
-                                            map,
-                                            position: {{lat: parseFloat(location[1]), lng: parseFloat(location[2])}},
-                                            content: pinBackground.element,
-                                            //gmpDraggable: true
-                                        }});
+                                            }});
+                                            var markerViewBackground = new AdvancedMarkerElement({{
+                                                map,
+                                                position: {{lat: parseFloat(location[1]), lng: parseFloat(location[2])}},
+                                                content: pinBackground.element,
+                                                //gmpDraggable: true
+                                            }});
+                                        }}
+                                        
                                     }}
 
                                     markerViewBackground.addListener('click', function () {{
@@ -535,7 +558,7 @@ class MapCluster:
                         window.chrome.webview.postMessage(JSON.stringify(result));
                     }}
                     showData()
-                    splitOrderCluster()
+                    // splitOrderCluster()
                     }}
                 </script>
                     <style>

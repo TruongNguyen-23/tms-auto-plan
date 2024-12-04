@@ -51,10 +51,10 @@
                     var myChart = new Chart(ctx, {
                         type: 'bar',
                         data: {
-                            labels: ['Trip #1', 'Trip #2', 'Trip #3', 'Trip #4', 'Trip #5', 'Trip #6', 'Trip #7', 'Trip #8', 'Trip #9', 'Trip #10', 'Trip #11', 'Trip #12', 'Trip #13', 'Trip #14', 'Trip #15', 'Trip #16', 'Trip #3072447725', 'Trip #', 'Trip #3072447661', 'Trip #3072447660', 'Trip #3072447728', 'Trip #3072447705', 'Trip #3072447815'],
+                            labels: ['Trip #1', '', '', '', '', '', '', '', '', ''],
                             datasets: [{
-                                data:[8.243, 14.614, 14.61, 12.39, 5.141, 9.377, 9.277, 11.81, 13.908, 12.601, 8.85, 10.841, 12.997, 22.146, 1.976, 11.896, 74.93, 25.964, 21.335, 38.302, 28.9, 20.7, 25.008],
-                                backgroundColor:['#3b5998', '#dc4e41', '#bd081c', '#0077b5', '#3399ff', '#eb4924', '#00405d', '#45668e', '#ef4056', '#ed812b', '#43d854', '#fffa37', '#97FFFF', '#8B4513', '#CD853F', '#473C8B', '#CAFF70', '#FFB90F', '#FF6A6A', '#FF8247', '#CD4F39', '#DDC488', '#9a60d8'],
+                                data:[0.62],
+                                backgroundColor:['#3b5998'],
                                 borderWidth: 2
                             }]
                         },
@@ -64,16 +64,23 @@
                             legend: {
                                 display: false
                             },
-                            lineAt:15.0,
+                            lineAt:15,
                             scales: {
                                 
+        xAxes:[{
+            ticks: {
+                maxRotation: 0,
+                minRotation: 0,
+                padding: 10
+            }
+        }],
                                 yAxes: [{
                                     ticks: {
                                         min: 0,
                                         autoSkip: false,
                                         beginAtZero: true,
                                         stepSize:3,
-                                        max:18
+                                        max:15
                                     }
                                 }]
                             },
@@ -85,14 +92,14 @@
                             },
                             onResize: function (chart, size) {
                                 if (chart.height > 300) {
-                                    chart.options.lineAt = 15.0;
-                                    chart.options.scales.yAxes[0].ticks.max = 90;
-                                    chart.options.scales.yAxes[0].ticks.stepSize = 18;
+                                    chart.options.lineAt = 15;
+                                    chart.options.scales.yAxes[0].ticks.max = 0;
+                                    chart.options.scales.yAxes[0].ticks.stepSize = 0;
                                     chart.update();
                                 }
                                 else {
-                                    chart.options.lineAt = 15.0;
-                                    chart.options.scales.yAxes[0].ticks.max = 18;
+                                    chart.options.lineAt = 15;
+                                    chart.options.scales.yAxes[0].ticks.max = 15;
                                     chart.options.scales.yAxes[0].ticks.stepSize = 3;
                                     chart.update();
                                 }

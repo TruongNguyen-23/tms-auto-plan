@@ -21,6 +21,7 @@ class MergeTrip:
         save_file(html_content,file_name)
         file_render_html = file_name + ".html"
         return render_content_file_HTML(file_render_html)
+    
     def get_data_trips(self, data):
         request_data = requests.get(self.url_start_point).json()
         start_lat = request_data["Lat"]

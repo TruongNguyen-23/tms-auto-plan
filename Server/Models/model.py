@@ -1,10 +1,6 @@
-from flask import Flask
-from flask_restx import Api, fields, Namespace
+from flask_restx import fields
 from datetime import time
-
-app = Flask(__name__)
-api = Api(app)
-tms_namespace = Namespace("TMS", description="TMS")
+from tms import *
 
 order_models = api.model(
     "Orders",

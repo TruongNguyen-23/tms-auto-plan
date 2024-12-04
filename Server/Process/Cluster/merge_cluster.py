@@ -33,7 +33,7 @@ class MergerCluster:
         
         if data_trips["LabelTripNo"]:
             content_html_cluster = MapCluster().show_map(self.cluster, data_trips["LabelTripNo"], self.cluster["TypeMap"])
-            html = TripChart().show_chart(data_trips["Quality"], self.mode_capacity, self.limit_weight, data_trips["LabelTripNo"])
+            html = TripChart().show_chart(data_trips, self.cluster)
             save_file(content_html_cluster, self.cluster_file)
             save_content_cluster_cache(content_html_cluster, self.cluster_file)
             save_file(html, self.chart_file)
@@ -145,18 +145,20 @@ class MergerCluster:
         
             
     def get_data_trips(self, data):
-        keys_column = ["OrderNo","Weight","Qty","Volume","Area","TripNo","LabelTripNo",
-                       "AreaCode","ParentCode","Region","LoadRate","Centroid","Trip",
-                       "Quality","TripOrder","OrderCluster"]
+        keys_column = [
+            "OrderNo","Weight","Qty","Volume","Area","TripNo","LabelTripNo",
+            "AreaCode","ParentCode","Region","LoadRate","Centroid","Trip",
+            "Quality","TripOrder","OrderCluster"
+        ]
         capacity = []
         # case capacity null or 0
         capacity_temp = []
         obj_data = dict((key,[]) for key in keys_column)
         
-        request_data = requests.get(self.url_start_point).json()
-        start_lat = request_data["Lat"]
-        start_lon = request_data["Lon"]
-        self.start_point = [float(start_lat), float(start_lon)]
+        # request_data = requests.get(self.url_start_point).json()
+        # start_lat = request_data["Lat"]
+        # start_lon = request_data["Lon"]
+        self.start_point = [float(data["PickupLat"]), float(data["PickupLon"])]
         
         
         
@@ -190,7 +192,22 @@ class MergerCluster:
                     }
                 obj_data["OrderCluster"].append(item["OrdersClusters"])
                 for value in item["OrdersClusters"]:
+                    
                     data_hard["trip"].append(value)
+                    if self.start_point:
+                        data_start_point = {
+                            "OrderNo":"",
+                            "Lat":str(self.start_point[0]),
+                            "Lon":str(self.start_point[1]),
+                            "ShipToCode":"",
+                            "ShipTo":"",
+                            "OrderId":"",
+                            "ShipToType":"",
+                            "Weight":0,
+                            "Volume":0,
+                            "Qty":0
+                        }
+                        data_hard["trip"].append(data_start_point)
 
                     if str(value["AreaDesc"]) not in data_hard["area"]:
                         data_hard["area"].append(str(value["AreaDesc"]))
@@ -245,11 +262,15 @@ class MergerCluster:
                 self.cluster["Radius"] = DistanceMatrix.calculate_radius_cluster(
                 obj_data["Trip"], self.cluster["Centroid"])
                 self.cluster["TypeMap"] = self.find_value_type_map()
+                self.cluster["StartPoint"] = self.start_point
+                self.cluster["CapacityFactor"] = self.mode_capacity
+                
 
             if capacity_temp and len(capacity_temp) == len(obj_data["Trip"]) :
                 self.limit_weight = max(capacity_temp)
             else:
                 self.limit_weight = max(capacity)
+            self.cluster["EquipmentType"] = self.limit_weight
 
         return obj_data
             

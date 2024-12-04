@@ -80,6 +80,7 @@ class SubRouteTrip:
                 location.append([lat,lon])
         total = len(location)
         return total
+    
     def order_sub_route(self, data, routes, capacity):
         temp_data = data["Orders"].copy()
         limit_weight = capacity["EquipmentType"]
@@ -88,16 +89,19 @@ class SubRouteTrip:
         km_distance_merge = data["DistanceMergeRoute"]
         merge_trips = data["MergeTrip"]
         max_drop_points = data["DropsPoint"]
-   
+        
+        routes = self.sorted_route_define(routes)
+        
         grouped_temp = self.group_lists(routes)
+        
         temp_dict = {i: ",".join(values) for i, values in enumerate(grouped_temp)}
         if temp_dict:
-            if limit_weight and mode_split_capacity is True:
+            if limit_weight and mode_split_capacity:
                 sub_route = self.split_trips_sub_route(data, temp_dict, limit_weight, mode_capacity)
-                if merge_trips:
-                  sub_route = self.merge_trip_sub_route_with_distance(sub_route, limit_weight, 
-                                                                      mode_capacity, km_distance_merge,
-                                                                      max_drop_points)
+                # if merge_trips:
+                #   sub_route = self.merge_trip_sub_route_with_distance(sub_route, limit_weight, 
+                #                                                       mode_capacity, km_distance_merge,
+                #                                                       max_drop_points)
             else:
                 # data_sub_route = []
                 # for index,route in enumerate(temp_dict):
@@ -133,8 +137,17 @@ class SubRouteTrip:
                 sub_route = data_sub_route
         else:   
             sub_route = []
+        if merge_trips:
+            sub_route = self.merge_trip_sub_route_with_distance(sub_route, limit_weight, 
+                                                              mode_capacity, km_distance_merge,
+                                                              max_drop_points)
         return sub_route, data["Orders"]
     
+    
+    def sorted_route_define(self, routes):
+        for items in routes:
+            items.sort(reverse = False)
+        return routes    
     def total_trip(self, trips, mode_capacity):
         
         if trips:
@@ -150,6 +163,7 @@ class SubRouteTrip:
                 if area_code in route_define[route]:
                     return True
     def check_data_in_trip(self, data_prev, data_next):
+        
         area_data_prev = [items["AreaCode"] for items in data_prev]
         area_data_next = [items["AreaCode"] for items in data_next]
         if bool(set(area_data_next) & set(area_data_prev)):
@@ -199,6 +213,7 @@ class SubRouteTrip:
                     data_sub_route.append(temp_trip)
                 if not self.check_data_in_route_define(data, route_define):
                     is_run = True
+       
         return self.group_data_single_to_trips_split(data_sub_route, value_option, max_drops_points, limit_weight)
     def group_data_single_to_trips_split(self, sub_data, val, drops, limit_weight):
         for i in range(len(sub_data)):
@@ -209,7 +224,7 @@ class SubRouteTrip:
                   drop_start = self.total_drop_points_for_trips(sub_data[i])
                   drop_end = self.total_drop_points_for_trips(sub_data[j])
                   total_drop = drop_start + drop_end
-                  #____________________#
+                  #____________________#                      
                   if total_start + total_end < limit_weight and check_:
                        if drops:
                            if sub_data[j] not in sub_data[i] and total_drop < drops:
@@ -303,8 +318,18 @@ class SubRouteTrip:
             if total < equipment * 0.8:
                order.append(items)
                routes.remove(items)
-      
-        
+            #    fix function when remove items
+                     
+        # 20/11/2024
+        # for i in reversed(range(len(routes))):
+        #     total = 0
+        #     for item in routes[i]:
+        #         total += item[value_option]
+        #     if total < equipment * 0.8:
+        #         order.append(routes[i])
+        #         routes.remove(routes[i])
+                
+                
         temp = {"Data": {"Start": [], "End": []}, "Distance": []}
         for i in range(len(order)):
             for j in range(i + 1, len(order)):
@@ -362,6 +387,9 @@ class SubRouteTrip:
                                 continue
                     else:
                         break
+                    #20/11/2024
+                    # remove funtion trên
+                    # break
                 else:
                     continue
                 if temp["Distance"] != []:

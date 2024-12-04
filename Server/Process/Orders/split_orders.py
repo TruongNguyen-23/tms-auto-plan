@@ -1,10 +1,12 @@
 from Server.Process.ActionUser.action_for_trip import depth, group_data_trip, group_trip, get_number_mode_capacity
-from Server.Process.ActionUser.action_calculate_time import random_color_for_trip
+from Server.Process.ActionUser.action_calculate_time import *
 from Server.Process.Distance.distance_Matrix import DistanceMatrix
 from Server.Process.Trips.trip_group import *
 from sklearn.cluster import KMeans
+# from threading import Thread
 from flask import abort
 import numpy as np
+
 
 class SplitOrders:
     def __init__(self):
@@ -50,6 +52,46 @@ class SplitOrders:
     def function_remove_order(self, data):
         return self.calculate_centroid_trip(self.optimal_trips(data))
     
+    def group_trip_simple(self, orders, trips):
+        orders, order_not_fit = group_data_trip(orders, self.limit_weight, self.mode_capacity, self.drop_point)
+        if order_not_fit:
+            trips.extend(order_not_fit)
+        if self.check_mode_total_weight_trip(orders):
+            return trips , orders
+        else:
+            self.group_trip_simple(orders, trips)
+            
+        return trips , orders
+    
+    
+    # def optimal_trips(self, data):
+    #     """
+    #         Function optimal trips when data run algorithms k - means
+    #         Variable order need remove data duplicate: can use for loop
+    #     """
+    #     trips = []   
+    #     order = [item for idx, item in enumerate(data) if item not in data[:idx]]    
+    #     trips , order_fit = self.group_trip_simple(order, trips)
+    #     if self.merge_trip:
+    #         orders, trips = self.handle_data_merger(order_fit, trips)
+    #         if self.drop_point and self.percent_merge:
+    #             result = group_trip_with_drop_points(orders, trips ,self.limit_weight, self.mode_capacity, self.distance_merge_trip, self.drop_point)
+    #         elif self.percent_merge:
+    #             result = group_trip(orders, trips ,self.limit_weight, self.mode_capacity, self.distance_merge_trip, self.drop_point)    
+    #         return result
+
+    #     else:
+    #         trips.extend(order_fit)
+    #         return trips
+        
+        # Apply thread for function:
+        # thread = Thread(target=self.group_trip_simple, args=(order,trips))
+        # thread.start()
+        # thread.join()
+        # trips.extend(order)
+        # return trips
+    
+    # @timer_func
     def optimal_trips(self, data):
         """
             Function optimal trips when data run algorithms k - means
@@ -68,6 +110,7 @@ class SplitOrders:
                 order, new_order_not_fit = group_data_trip(order_fit, self.limit_weight, self.mode_capacity, self.drop_point)
                 if new_order_not_fit:
                     trips.extend(new_order_not_fit)
+
         if self.merge_trip:
             orders, trips = self.handle_data_merger(order_fit, trips)
             if self.drop_point and self.percent_merge:
@@ -79,6 +122,7 @@ class SplitOrders:
         else:
             trips.extend(order_fit)
             return trips
+        
         
     def handle_data_merger(self, orders, trips):
         for order in orders:
@@ -106,6 +150,7 @@ class SplitOrders:
     def calculate_centroid_trip(self, trip):
         try:
             result_compare = []
+            # 19/11/2024 data trip add more parameter float trip -> trip[0]
             for items in trip:
                 temp = []
                 if depth(items) == 1:
@@ -140,7 +185,7 @@ class SplitOrders:
                 lon = item[1]
                 for value in order:
                     if lat == float(value[1]) and lon == float(value[2]):
-                        data = [value[0], value[1], value[2], value[7], value[8], value[6], value[3], value[4], value[5], value[9]]
+                        data = [value[0], value[1], value[2], value[7], value[8], value[6], value[3], value[4], value[5], value[9],value[11]]
                         if data not in temp_data:
                             temp_data.append(data)
             trip.append(temp_data)

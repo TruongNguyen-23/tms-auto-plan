@@ -50,6 +50,8 @@ def timer_func(func):
         return result, execution_time 
     return wrapper
 
+
+
 def clear_cache_compile():
     for root, dirs, files in os.walk("."):
         for dir_name in dirs:
